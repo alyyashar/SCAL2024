@@ -1,0 +1,10 @@
+access_control: scal/dataset/access_control
+arithmetic: scal/dataset/arithmetic
+bad_randomness: scal/dataset/bad_randomness
+denial_of_service: scal/dataset/denial_of_service
+front_running: scal/dataset/front_running
+reentrancy: scal/dataset/reentrancy
+short_addresses: scal/dataset/short_addresses
+time_manipulation: scal/dataset/time_manipulation
+unchecked_ll_calls: scal/dataset/unchecked_low_level_calls
+other: scal/dataset/other

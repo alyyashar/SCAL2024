@@ -1,0 +1,16 @@
+{
+    "version": 2,
+    "installCommand": "pip3 install -r scal/requirements.txt && npm install",
+    "builds": [
+        {
+            "src": "./index.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/"
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "scal_server",
+  "version": "1.0.0",
+  "description": "Backend server and SCAL framework Node runner",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Imam Abubakar",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.3",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-jwt": "^7.7.5",
+    "express-validator": "^6.14.2",
+    "form-data": "^4.0.0",
+    "formidable": "^1.2.1",
+    "gridfs-stream": "^1.1.1",
+    "joi": "^17.6.0",
+    "joi-password-complexity": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "loader": "^2.1.1",
+    "mongoose": "^6.5.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4",
+    "multer-gridfs-storage": "^5.0.2",
+    "nodemailer": "^6.8.0",
+    "python-shell": "^3.0.1",
+    "request": "^2.88.2",
+    "serve-static": "^1.15.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

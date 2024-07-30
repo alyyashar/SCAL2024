@@ -1,0 +1,9 @@
+access_control: contracts/access_control
+arithmetic: contracts/arithmetic
+bad_randomness: contracts/bad_randomness
+denial_of_service: contracts/denial_of_service
+tod: contracts/tod
+reentrancy: contracts/reentrancy
+short_addresses: contracts/short_addresses
+time_dependence: contracts/time_dependence
+unchecked_send: contracts/unchecked_send
