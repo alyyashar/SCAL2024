@@ -1,0 +1,41 @@
+.DS_Store
+node_modules/
+npm-debug.log
+.idea/
+dist/
+
+#Ignore scal/results
+scal/results/oyente/*
+scal/results/maian/*
+scal/results/manticore/*
+scal/results/mythril/*
+scal/results/securify/*
+scal/results/smartcheck/*
+scal/results/slither/*
+scal/results/honeybadger/*
+scal/results/osiris/*
+scal/results/solhint/*
+scal/results/logs/*
+
+#Keep folders
+!scal/results/securify/.keep
+!scal/results/osiris/.keep
+!scal/results/honeybadger/.keep
+!scal/results/oyente/.keep
+!scal/results/maian/.keep
+!scal/results/mythril/.keep
+!scal/results/manticore/.keep
+!scal/results/smartcheck/.keep
+!scal/results/slither/.keep
+!scal/results/solhint/.keep
+!scal/results/logs/.keep
+
+#Ignore DS_Store
+.DS_Store
+
+#Ignore pycache
+*.pyc
+__pycache__
+
+#Ignore vscode
+.vscode/
