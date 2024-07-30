@@ -39,7 +39,7 @@ function Register(props) {
     if (error) return;
 
     axios
-      .post(`https://5000-imamabubakar-scalserver-k2k88lajzmw.ws-eu75.gitpod.io/api/register`, postData)
+      .post(`https://5009-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/register`, postData)
       .then((res) => {
         errorObj.success = 'Account created successfully';
         setErrors(errorObj);

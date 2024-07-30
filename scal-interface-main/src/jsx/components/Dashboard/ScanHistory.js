@@ -13,7 +13,7 @@ const ScanHistory = () => {
     useEffect(() => {
         if (id) {
             axios
-                .get(`https://5000-imamabubakar-scalserver-k2k88lajzmw.ws-eu75.gitpod.io/api/user/${id}`)
+                .get(`https://5009-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/user/${id}`)
                 .then(res => {
                     return res.data;
                 })
