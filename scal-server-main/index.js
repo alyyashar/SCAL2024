@@ -165,7 +165,7 @@ app.post('/api/file-import', async (req, res) => {
   }
 })
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5009;
 app.listen(port, () => console.log(`SCAL Server is running on localhost PORT: ${port}`));
 
 
