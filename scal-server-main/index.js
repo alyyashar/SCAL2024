@@ -11,19 +11,40 @@ const app = express();
 const connection = require('./db');
 const User = require('./model/auth.model');
 
+// CORS Options
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://3000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io'
+];
+
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   optionSuccessStatus: 200
 };
+
+app.use(cors(corsOptions)); // Apply CORS options here
 
 // Database connection
 connection();
 
 // Middlewares
 app.use(bodyParser.json());
-app.use(serveStatic(__dirname + "/dist"));
-app.use(cors(corsOptions)); // Apply CORS options here
+
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`Received ${req.method} request for ${req.url}`);
+  next();
+});
+
+// Serve static files
+app.use(serveStatic(path.join(__dirname, 'dist'))); // Serve static files from /dist
 
 // Load all routes
 const authRouter = require('./routes/auth.routes');
@@ -31,73 +52,82 @@ const userRouter = require('./routes/user.routes');
 
 // Routes
 app.get('/', (req, res) => res.json('SCAL Server is up and running'));
-app.use('/api', authRouter);
-app.use('/api', userRouter);
+app.use('/api', authRouter); // Apply /api prefix to auth routes
+app.use('/api', userRouter); // Apply /api prefix to user routes
+
+// Fetch all users
 app.get('/api/all-users', async (req, res) => {
-  const allUsers = await User.find();
-  res.json(allUsers);
+  try {
+    const allUsers = await User.find();
+    res.json(allUsers);
+  } catch (err) {
+    console.error('Failed to fetch users:', err);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
 });
 
+// Handle file input
 app.post('/api/file-input', async (req, res) => {
   try {
     res.setTimeout(10 * 60 * 1000, function () {
       console.log('Request has timed out.');
-      res.send(408);
+      res.sendStatus(408);
     });
 
-    const tools = req.body.tools;
-    const contract = req.body.file;
+    const { tools, file } = req.body;
 
-    try {
-      fs.writeFileSync(__dirname + '/scal/toAnalyze/toAnalyze.sol', contract);
-      console.log("File Written Successfully");
-    } catch (err) {
-      console.error(err);
-    }
+    fs.writeFileSync(path.join(__dirname, 'scal/toAnalyze/toAnalyze.sol'), file);
+    console.log("File Written Successfully");
 
     const options = {
-      args: ['--tool', ...tools, '--file', __dirname + '/scal/toAnalyze/toAnalyze.sol']
+      args: ['--tool', ...tools, '--file', path.join(__dirname, 'scal/toAnalyze/toAnalyze.sol')]
     };
 
-    let results = fs.readFileSync(__dirname + '/scal/results.json');
-
-    let pyshell = new PyShell.PythonShell(__dirname + '/scal/scal.py', options);
-
-    console.log("Received Request: ", options.args);
+    let pyshell = new PyShell.PythonShell(path.join(__dirname, 'scal/scal.py'), options);
 
     pyshell.on('message', function (message) {
       console.log("Received", message);
     });
 
-    pyshell.end(async (err, code, signal) => {
-      if (err) throw err;
-      let results = await fs.readFileSync(__dirname + '/scal/results.json');
-      res.send(results);
+    pyshell.end(async (err) => {
+      if (err) {
+        console.error('Python script execution failed:', err);
+        return res.status(500).json({ error: 'Python script execution failed' });
+      }
+      try {
+        const results = fs.readFileSync(path.join(__dirname, 'scal/results.json'));
+        res.send(results);
+      } catch (readError) {
+        console.error('Failed to read results file:', readError);
+        res.status(500).json({ error: 'Failed to read results file' });
+      }
     });
   } catch (err) {
+    console.error('Something went wrong:', err);
     res.status(400).json({ error: 'Something went wrong!' });
-    console.log(err);
   }
 });
 
+// Handle file import
 app.post('/api/file-import', async (req, res) => {
   try {
     let tools;
-    res.setTimeout(10 * 60000 * 1000, function () {
+    res.setTimeout(10 * 60 * 1000, function () {
       console.log('Request has timed out.');
-      res.send(408);
+      res.sendStatus(408);
     });
 
     const form = new formidable.IncomingForm();
 
     form.on('error', function (err) {
-      console.log('An error has occurred: \n' + err);
+      console.error('File upload failed:', err);
+      res.status(500).json({ error: 'File upload failed' });
     });
 
     form.parse(req);
 
     form.on('fileBegin', function (name, file) {
-      file.path = __dirname + '/scal/toAnalyze/toAnalyze.sol';
+      file.path = path.join(__dirname, 'scal/toAnalyze/toAnalyze.sol');
     });
 
     form.on('field', function (name, value) {
@@ -109,26 +139,31 @@ app.post('/api/file-import', async (req, res) => {
     form.on('file', async function (name, file) {
       console.log('Uploaded ' + file.name);
       const options = {
-        args: ['--tool', ...tools.split(','), '--file', __dirname + '/scal/toAnalyze/toAnalyze.sol']
+        args: ['--tool', ...tools.split(','), '--file', path.join(__dirname, 'scal/toAnalyze/toAnalyze.sol')]
       };
 
-      let results = fs.readFileSync(__dirname + '/scal/results.json');
-
-      let pyshell = new PyShell.PythonShell(__dirname + '/scal/scal.py', options);
-
-      console.log("Received Request: ", options.args);
+      let pyshell = new PyShell.PythonShell(path.join(__dirname, 'scal/scal.py'), options);
 
       pyshell.on('message', function (message) {
         console.log("Received", message);
       });
 
-      pyshell.end(async (err, code, signal) => {
-        if (err) throw err;
-        let results = await fs.readFileSync('scal/results.json');
-        res.send(results);
+      pyshell.end(async (err) => {
+        if (err) {
+          console.error('Python script execution failed:', err);
+          return res.status(500).json({ error: 'Python script execution failed' });
+        }
+        try {
+          const results = fs.readFileSync(path.join(__dirname, 'scal/results.json'));
+          res.send(results);
+        } catch (readError) {
+          console.error('Failed to read results file:', readError);
+          res.status(500).json({ error: 'Failed to read results file' });
+        }
       });
     });
   } catch (err) {
+    console.error('Something went wrong:', err);
     res.status(400).json({ error: 'Something went wrong!' });
   }
 });

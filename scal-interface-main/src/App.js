@@ -1,12 +1,12 @@
 import { lazy, Suspense, useEffect, useContext } from 'react';
 
-/// Components
+// Components
 import Index from "./jsx";
 import { connect } from 'react-redux';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
-// action
+// Actions
 import { isAuth } from './jsx/helpers/Auth'
-/// Style
+// Style
 import "./vendor/bootstrap-select/dist/css/bootstrap-select.min.css";
 import './vendor/datatables/css/dataTables.min.css';
 import "./css/style.css";
@@ -14,7 +14,7 @@ import Error404 from "./jsx/pages/Error404";
 import { isTheme } from "./jsx/helpers/Auth";
 import { ThemeContext } from "./context/ThemeContext";
 
-
+// Lazy-loaded components
 const SignUp = lazy(() => import('./jsx/pages/Registration'));
 const ForgotPassword = lazy(() => import('./jsx/pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./jsx/pages/ResetPassword'));
@@ -23,8 +23,7 @@ const Login = lazy(() => {
         setTimeout(() => resolve(import('./jsx/pages/Login')), 500);
     });
 });
-
-
+const ActivateAccount = lazy(() => import('./jsx/pages/ActivateAccount')); // Import the new component
 
 function App(props) {
 
@@ -35,13 +34,13 @@ function App(props) {
         changeBackground, background
       } = useContext(ThemeContext);
     
-      useEffect(() => {
+    useEffect(() => {
         if(theme === null){
             theme = { value: "light", label: "Light" };
         }
         changeBackground(theme);
         console.log(background)
-      }, []);
+    }, []);
 
     let routes = (
         <Switch>
@@ -71,10 +70,12 @@ function App(props) {
             <Route path='/users/new/register' component={SignUp} />
             <Route path='/forgot-password' component={ForgotPassword} />    
             <Route path='/users/password/reset/:token' component={ResetPassword} />
-           
+            <Route path='/users/activate/:token' component={ActivateAccount} /> {/* Add this route */}
+
             <Route path='*' component={Error404} />
         </Switch>
     );
+
     if (authCheck) {
         return (
             <>
@@ -119,4 +120,3 @@ const mapStateToProps = (state) => {
 };
 
 export default withRouter(connect(mapStateToProps)(App));
-

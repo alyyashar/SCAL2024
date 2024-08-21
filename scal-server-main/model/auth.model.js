@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
-// user schema
+
+// User schema
 const userSchema = new mongoose.Schema(
   {
     email: {
@@ -23,7 +24,7 @@ const userSchema = new mongoose.Schema(
       {
         analysisName: String,
         noOfVulns: String,
-        output: { type : Array , "default" : [] },
+        output: { type: Array, default: [] },
         scanPeriod: String,
         fileType: String,
         toolUsed: [String],
@@ -31,8 +32,7 @@ const userSchema = new mongoose.Schema(
     ],
     profilePicture: {
       type: String,
-      default:
-        'https://www.ommel.fi/content/uploads/2019/03/dummy-profile-image-male.jpg',
+      default: 'https://www.ommel.fi/content/uploads/2019/03/dummy-profile-image-male.jpg',
     },
     hashed_password: {
       type: String,
@@ -47,13 +47,25 @@ const userSchema = new mongoose.Schema(
       data: String,
       default: '',
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationToken: {
+      type: String,
+      default: '',
+    },
+    emailVerificationTokenExpiry: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// virtual
+// Virtual field for password
 userSchema
   .virtual('password')
   .set(function (password) {
@@ -65,7 +77,7 @@ userSchema
     return this._password;
   });
 
-// methods
+// Methods
 userSchema.methods = {
   authenticate: function (plainText) {
     return this.encryptPassword(plainText) === this.hashed_password;
