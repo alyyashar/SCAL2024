@@ -13,7 +13,7 @@ export function signUp(name, email, password) {
         password,
     };
     return axios.post(
-        `https://5009-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/register`,
+        `https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/register`,
         postData,
     );
 }
@@ -24,7 +24,7 @@ export function login(email, password) {
         password,
     };
     return axios.post(
-        `https://5009-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/login`,
+        `https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/login`,
         postData,
     );
 }

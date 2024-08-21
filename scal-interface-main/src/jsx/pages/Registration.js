@@ -1,7 +1,6 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { connect } from 'react-redux';
 import axios from 'axios';
-
 import { Modal, Button } from "react-bootstrap";
 
 function Register(props) {
@@ -39,21 +38,19 @@ function Register(props) {
     if (error) return;
 
     axios
-      .post(`https://5009-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/register`, postData)
+      .post(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/register`, postData)
       .then((res) => {
         errorObj.success = 'Account created successfully';
         setErrors(errorObj);
-      setSuccessModal(true);
+        setSuccessModal(true);
       })
       .catch((err) => {
-        errorObj.issue = err;
+        errorObj.issue = err.message; // Log the error message
         setErrors(errorObj);
         setFailureModal(true);
+        console.error("Registration Error:", err); // Log the error for debugging
       });
-
   }
-
-  // https://scal-server-prod-scal-server-d1m66q.mo1.mogenius.io
 
   return (
     <div className="authincation h-100 p-meddle">
@@ -64,23 +61,21 @@ function Register(props) {
               <div className="row no-gutters">
                 <div className="col-xl-12">
                   <div className="auth-form">
-                    <div className="text-center mb-3">
-
-                    </div>
-                    <h4 className="text-center mb-4 ">Sign up your SCAL account</h4>
+                    <div className="text-center mb-3"></div>
+                    <h4 className="text-center mb-4">Sign up your SCAL account</h4>
                     {errors.issue && (
-                      <div className=''>
+                      <div className='alert alert-danger'>
                         {errors.issue}
                       </div>
                     )}
                     {errors.success && (
-                      <div className=''>
+                      <div className='alert alert-success'>
                         {errors.success}
                       </div>
                     )}
                     <form onSubmit={onSignUp}>
                       <div className="form-group mb-3">
-                        <label className="mb-1 ">
+                        <label className="mb-1">
                           <strong>Full Name</strong>
                         </label>
                         <input
@@ -91,32 +86,32 @@ function Register(props) {
                           placeholder="John Doe"
                         />
                       </div>
-                      {errors.name && <div>{errors.name}</div>}
+                      {errors.name && <div className="alert alert-danger">{errors.name}</div>}
                       <div className="form-group mb-3">
-                        <label className="mb-1 ">
+                        <label className="mb-1">
                           <strong>Email</strong>
                         </label>
                         <input
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                          type="email" // Ensure the type is email
                           className="form-control"
                           placeholder="hello@example.com"
                         />
                       </div>
-                      {errors.email && <div>{errors.email}</div>}
+                      {errors.email && <div className="alert alert-danger">{errors.email}</div>}
                       <div className="form-group mb-3">
-                        <label className="mb-1 ">
+                        <label className="mb-1">
                           <strong>Password</strong>
                         </label>
                         <input
                           value={password}
-                          onChange={(e) =>
-                            setPassword(e.target.value)
-                          }
+                          onChange={(e) => setPassword(e.target.value)}
+                          type="password" // Ensure the type is password
                           className="form-control"
                         />
                       </div>
-                      {errors.password && <div>{errors.password}</div>}
+                      {errors.password && <div className="alert alert-danger">{errors.password}</div>}
                       <div className="text-center mt-4">
                         <button
                           type="submit"
@@ -124,50 +119,51 @@ function Register(props) {
                         >
                           Sign up
                         </button>
-                        {successModal === true && <Modal
-                          className="fade bd-example-modal-sm"
-                          size="sm"
-                          show={successModal}
-                        >
-                          <Modal.Body>SCAL Account created successfully</Modal.Body>
-                          <Modal.Footer>
-                            <Button
-                              variant="primary light"
-                              onClick={() => setSuccessModal(false)}
-                            >
-                              Close
-                            </Button>
-                          </Modal.Footer>
-                        </Modal>
-                        }
-                        {failureModal === true && <Modal
-                          className="fade bd-example-modal-sm"
-                          size="sm"
-                          show={failureModal}
-                        >
-                          <Modal.Body>Account Creation Failed. Try again</Modal.Body>
-                          <Modal.Footer>
-                            <Button
-                              variant="primary light"
-                              onClick={() => setFailureModal(false)}
-                            >
-                              Close
-                            </Button>
-                          </Modal.Footer>
-                        </Modal>
-                        }
-
+                        {successModal && (
+                          <Modal
+                            className="fade bd-example-modal-sm"
+                            size="sm"
+                            show={successModal}
+                          >
+                            <Modal.Body>SCAL Account created successfully</Modal.Body>
+                            <Modal.Footer>
+                              <Button
+                                variant="primary light"
+                                onClick={() => setSuccessModal(false)}
+                              >
+                                Close
+                              </Button>
+                            </Modal.Footer>
+                          </Modal>
+                        )}
+                        {failureModal && (
+                          <Modal
+                            className="fade bd-example-modal-sm"
+                            size="sm"
+                            show={failureModal}
+                          >
+                            <Modal.Body>Account Creation Failed. Try again</Modal.Body>
+                            <Modal.Footer>
+                              <Button
+                                variant="primary light"
+                                onClick={() => setFailureModal(false)}
+                              >
+                                Close
+                              </Button>
+                            </Modal.Footer>
+                          </Modal>
+                        )}
                       </div>
                     </form>
+                    {/* Uncomment if needed */}
                     {/* <div className="new-account mt-3">
-                      <p className="">
+                      <p>
                         Already have an account?{" "}
                         <Link className="text-primary" to="/login">
                           Sign in
                         </Link>
                       </p>
-                    </div>
-              */}
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -177,7 +173,7 @@ function Register(props) {
       </div>
     </div>
   );
-};
+}
 
 const mapStateToProps = (state) => {
   return {
@@ -188,4 +184,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(Register);
-
