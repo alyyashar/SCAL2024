@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-//Validation
+// Validation
 const {
   validRegister,
   validLogin,
@@ -9,7 +9,7 @@ const {
   resetPasswordValidator,
 } = require('../helpers/valid');
 
-//load controllers
+// Load controllers
 const {
   registerController,
   loginController,

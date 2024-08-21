@@ -64,7 +64,7 @@ const ImportAnalysis = () => {
         axios
             ({
                 method: 'post',
-                url: 'https://5009-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/file-import',
+                url: 'https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/file-import',
                 data: formData,
                 headers: {
                     tools: tools,
@@ -216,7 +216,7 @@ const ImportAnalysis = () => {
         }
 
         axios
-            .post(`https://5009-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/user/updatescan/${isAuth()._id}`, saveData)
+            .post(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/user/updatescan/${isAuth()._id}`, saveData)
             .then((res) => {
                 console.log("Saved Successfully");
                 setSave("Analysis Saved Successfully");
