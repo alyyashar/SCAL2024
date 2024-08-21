@@ -27,11 +27,11 @@ function Login(props) {
     const errorObj = { email: '', password: '' };
     
     if (email === '') {
-      errorObj.email = 'Email is Required';
+      errorObj.email = 'Email is required';
       error = true;
     }
     if (password === '') {
-      errorObj.password = 'Password is Required';
+      errorObj.password = 'Password is required';
       error = true;
     }
     setErrors(errorObj);
@@ -41,13 +41,29 @@ function Login(props) {
     }
 
     axios
-      .post(`http://localhost:5000/api/login`, postData)
+      .post('https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/login', postData)
       .then((res) => {
         authenticate(res);
         history.push('/dashboard');
       })
       .catch((err) => {
-        setIssues(err.response.data.errors);
+        if (err.response) {
+          // Server responded with a status code that falls out of the range of 2xx
+          if (err.response.status === 401) {
+            setIssues('Invalid credentials');
+          } else if (err.response.data.errors) {
+            // Handle specific validation errors
+            setIssues(err.response.data.errors.join(', '));
+          } else {
+            setIssues('An error occurred while logging in');
+          }
+        } else if (err.request) {
+          // The request was made but no response was received
+          setIssues('No response from the server');
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          setIssues('Error setting up the request');
+        }
       });
   };
 
@@ -61,7 +77,7 @@ function Login(props) {
           <p className="mb-2 welcome-color">Welcome back!</p>
           <p>The Smart Contract Audit Lab</p>
         </div>
-        <div className="aside-image" style={{ backgroundImage: "url(" + loginbg + ")" }}></div>
+        <div className="aside-image" style={{ backgroundImage: `url(${loginbg})` }}></div>
       </div>
       <div className="container flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-7 mx-auto">
         <div className="d-flex justify-content-center h-100 align-items-center">
@@ -70,7 +86,7 @@ function Login(props) {
               <div className="col-xl-12 tab-content">
                 <div id="sign-in" className="auth-form form-validation">
                   <form onSubmit={onLogin} className="form-validate">
-                    <h3 className="text-center mb-4 text-black">Sign in your account</h3>
+                    <h3 className="text-center mb-4 text-black">Sign in to your account</h3>
                     <div className='text-danger text-center'>
                       {issues}
                     </div>
@@ -92,9 +108,7 @@ function Login(props) {
                         className="form-control"
                         value={password}
                         placeholder="Type Your Password"
-                        onChange={(e) =>
-                          setPassword(e.target.value)
-                        }
+                        onChange={(e) => setPassword(e.target.value)}
                       />
                       {errors.password && <div className="text-danger fs-12">{errors.password}</div>}
                     </div>
@@ -132,4 +146,5 @@ const mapStateToProps = (state) => {
     showLoading: state.auth.showLoading,
   };
 };
+
 export default connect(mapStateToProps)(Login);

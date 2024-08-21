@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { connect } from 'react-redux';
 import axios from 'axios';
 import { Modal, Button } from "react-bootstrap";
 
-function Register(props) {
+// Set the base URL for axios (Ensure this is correct for your backend)
+axios.defaults.baseURL = 'https://3000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io';
+
+function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  let errorsObj = { name: '', email: '', password: '', success: '', issue: '' };
-  const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({ name: '', email: '', password: '', success: '', issue: '' });
   const [successModal, setSuccessModal] = useState(false);
   const [failureModal, setFailureModal] = useState(false);
 
@@ -21,7 +22,8 @@ function Register(props) {
   function onSignUp(e) {
     e.preventDefault();
     let error = false;
-    const errorObj = { ...errorsObj };
+    const errorObj = { name: '', email: '', password: '', success: '', issue: '' };
+
     if (name === '') {
       errorObj.name = 'Name is Required';
       error = true;
@@ -37,18 +39,25 @@ function Register(props) {
     setErrors(errorObj);
     if (error) return;
 
+    console.log("Sending registration request with data:", postData);
+
     axios
-      .post(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/register`, postData)
+      .post('/api/register', postData) // Ensure this matches your backend route
       .then((res) => {
-        errorObj.success = 'Account created successfully';
-        setErrors(errorObj);
+        console.log("Registration successful:", res.data);
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          success: 'Account created successfully'
+        }));
         setSuccessModal(true);
       })
       .catch((err) => {
-        errorObj.issue = err.message; // Log the error message
-        setErrors(errorObj);
+        console.error("Registration Error Response:", err.response || err.message);
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          issue: err.response ? err.response.data.errors : err.message
+        }));
         setFailureModal(true);
-        console.error("Registration Error:", err); // Log the error for debugging
       });
   }
 
@@ -61,7 +70,6 @@ function Register(props) {
               <div className="row no-gutters">
                 <div className="col-xl-12">
                   <div className="auth-form">
-                    <div className="text-center mb-3"></div>
                     <h4 className="text-center mb-4">Sign up your SCAL account</h4>
                     {errors.issue && (
                       <div className='alert alert-danger'>
@@ -85,8 +93,8 @@ function Register(props) {
                           className="form-control"
                           placeholder="John Doe"
                         />
+                        {errors.name && <div className="alert alert-danger">{errors.name}</div>}
                       </div>
-                      {errors.name && <div className="alert alert-danger">{errors.name}</div>}
                       <div className="form-group mb-3">
                         <label className="mb-1">
                           <strong>Email</strong>
@@ -94,12 +102,12 @@ function Register(props) {
                         <input
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          type="email" // Ensure the type is email
+                          type="email"
                           className="form-control"
                           placeholder="hello@example.com"
                         />
+                        {errors.email && <div className="alert alert-danger">{errors.email}</div>}
                       </div>
-                      {errors.email && <div className="alert alert-danger">{errors.email}</div>}
                       <div className="form-group mb-3">
                         <label className="mb-1">
                           <strong>Password</strong>
@@ -107,11 +115,11 @@ function Register(props) {
                         <input
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          type="password" // Ensure the type is password
+                          type="password"
                           className="form-control"
                         />
+                        {errors.password && <div className="alert alert-danger">{errors.password}</div>}
                       </div>
-                      {errors.password && <div className="alert alert-danger">{errors.password}</div>}
                       <div className="text-center mt-4">
                         <button
                           type="submit"
@@ -155,15 +163,6 @@ function Register(props) {
                         )}
                       </div>
                     </form>
-                    {/* Uncomment if needed */}
-                    {/* <div className="new-account mt-3">
-                      <p>
-                        Already have an account?{" "}
-                        <Link className="text-primary" to="/login">
-                          Sign in
-                        </Link>
-                      </p>
-                    </div> */}
                   </div>
                 </div>
               </div>
@@ -175,12 +174,4 @@ function Register(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    errorMessage: state.auth.errorMessage,
-    successMessage: state.auth.successMessage,
-    showLoading: state.auth.showLoading,
-  };
-};
-
-export default connect(mapStateToProps)(Register);
+export default Register;
