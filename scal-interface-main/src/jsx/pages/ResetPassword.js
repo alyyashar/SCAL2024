@@ -40,7 +40,7 @@ const ResetPassword = () => {
     console.log(params.token)
 
     axios
-      .put(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/password/reset`, {
+      .put(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.ioapi/password/reset`, {
         resetPasswordLink: params.token,
         newPassword: password,
       })

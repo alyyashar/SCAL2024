@@ -63,7 +63,7 @@ const Header = ({ onNote }) => {
 	useEffect(() => {
 		if (id) {
 			axios
-				.get(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/user/${id}`)
+				.get(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.ioapi/user/${id}`)
 				.then((res) => {
 					setImageData(res.data.profilePicture);
 					setNameData(res.data.name);

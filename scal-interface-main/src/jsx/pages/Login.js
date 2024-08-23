@@ -41,7 +41,7 @@ function Login(props) {
     }
 
     axios
-      .post('https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/login', postData)
+      .post('https://5000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.ioapi/login', postData)
       .then((res) => {
         authenticate(res);
         history.push('/dashboard');
