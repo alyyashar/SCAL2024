@@ -14,7 +14,7 @@ const User = require('./model/auth.model');
 // CORS Options
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://3000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io'
+  'https://3000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.io'
 ];
 
 const corsOptions = {

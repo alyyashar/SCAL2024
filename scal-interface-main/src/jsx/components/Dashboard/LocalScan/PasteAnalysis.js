@@ -54,7 +54,7 @@ const PasteAnalysis = () => {
         }
         setloader(true);
         axios
-            .post(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.ioapi/file-input`, postData)
+            .post(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.io/api/file-input`, postData)
             .then((res) => {
                 setResult(res);
                 setOutput(res.data[0].analysis);
@@ -195,7 +195,7 @@ const PasteAnalysis = () => {
         }
 
         axios
-            .post(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.ioapi/user/updatescan/${isAuth()._id}`, saveData)
+            .post(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.io/api/user/updatescan/${isAuth()._id}`, saveData)
             .then((res) => {
                 console.log("Saved Successfully")
                 setSave("Analysis Saved Successfully");
