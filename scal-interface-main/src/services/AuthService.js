@@ -6,7 +6,7 @@ import {
 } from '../store/actions/AuthActions';
 
 // Base URL (Ensure this matches your backend configuration)
-const baseURL = 'https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io';
+const baseURL = 'https://5000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.io';
 
 export function signUp(name, email, password) {
     const postData = {
