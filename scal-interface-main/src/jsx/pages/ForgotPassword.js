@@ -32,7 +32,7 @@ const ForgotPassword = ({ history }) => {
     }
 
     axios
-      .post(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io/api/password/forget`, postData)
+      .post(`https://5000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.ioapi/password/forget`, postData)
       .then((res) => {
         console.log(res.data)
         const reset_link = res.data;
