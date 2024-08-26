@@ -10,11 +10,13 @@ const cors = require('cors');
 const app = express();
 const connection = require('./db');
 const User = require('./model/auth.model');
+const contractRoutes = require('./scmonitor/contractRoutes');  // Import the routes
+
 
 // CORS Options
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://3000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.io'
+  'https://3000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io'
 ];
 
 const corsOptions = {
@@ -33,6 +35,8 @@ app.use(cors(corsOptions)); // Apply CORS options here
 
 // Database connection
 connection();
+
+app.use('/api/scmonitor', contractRoutes);
 
 // Middlewares
 app.use(bodyParser.json());

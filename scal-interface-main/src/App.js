@@ -1,12 +1,8 @@
 import { lazy, Suspense, useEffect, useContext } from 'react';
-
-// Components
 import Index from "./jsx";
 import { connect } from 'react-redux';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
-// Actions
-import { isAuth } from './jsx/helpers/Auth'
-// Style
+import { isAuth } from './jsx/helpers/Auth';
 import "./vendor/bootstrap-select/dist/css/bootstrap-select.min.css";
 import './vendor/datatables/css/dataTables.min.css';
 import "./css/style.css";
@@ -23,23 +19,23 @@ const Login = lazy(() => {
         setTimeout(() => resolve(import('./jsx/pages/Login')), 500);
     });
 });
-const ActivateAccount = lazy(() => import('./jsx/pages/ActivateAccount')); // Import the new component
+const ActivateAccount = lazy(() => import('./jsx/pages/ActivateAccount'));
+const LiveGuard = lazy(() => import('./jsx/components/Dashboard/ContractMonitor')); // Import ContractMonitor.js as LiveGuard
 
 function App(props) {
-
     const authCheck = sessionStorage.getItem('user');
-    let theme = isTheme()
+    let theme = isTheme();
 
     const {
         changeBackground, background
-      } = useContext(ThemeContext);
+    } = useContext(ThemeContext);
     
     useEffect(() => {
-        if(theme === null){
+        if (theme === null) {
             theme = { value: "light", label: "Light" };
         }
         changeBackground(theme);
-        console.log(background)
+        console.log(background);
     }, []);
 
     let routes = (
@@ -65,13 +61,12 @@ function App(props) {
             <Route exact path="/app-profile">
                 <Redirect to="/login" />
             </Route>
-            
             <Route path='/login' component={Login} />
             <Route path='/users/new/register' component={SignUp} />
             <Route path='/forgot-password' component={ForgotPassword} />    
             <Route path='/users/password/reset/:token' component={ResetPassword} />
-            <Route path='/users/activate/:token' component={ActivateAccount} /> {/* Add this route */}
-
+            <Route path='/users/activate/:token' component={ActivateAccount} />
+            <Route path='/liveguard' component={LiveGuard} /> {/* Ensure this route is added */}
             <Route path='*' component={Error404} />
         </Switch>
     );

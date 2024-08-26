@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Modal, Button } from "react-bootstrap";
 
 // Set the base URL for axios (Ensure this is correct for your backend)
-axios.defaults.baseURL = 'https://3000-alyyashar-scal2024-zyixncvobqi.ws-eu115.gitpod.io';
+axios.defaults.baseURL = 'https://3000-alyyashar-scal2024-zyixncvobqi.ws-us115.gitpod.io';
 
 function Register() {
   const [name, setName] = useState('');
